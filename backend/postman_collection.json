@@ -1,0 +1,368 @@
+{
+  "info": {
+    "_postman_id": "c6238bfa-1a22-4412-9c3a-8fe0ab1432f7",
+    "name": "GreenThumb - Plant Care & Community API",
+    "description": "Comprehensive Postman collection for testing GreenThumb API (Case Study 100 - ITM Skills University)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Gardener\",\n  \"email\": \"test@greenthumb.io\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.token) {",
+                  "    pm.environment.set(\"token\", jsonData.token);",
+                  "    pm.environment.set(\"userId\", jsonData.user.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@greenthumb.io\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Plants",
+      "item": [
+        {
+          "name": "Get User Plants",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/plants",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "plants"]
+            }
+          }
+        },
+        {
+          "name": "Search Plants (Case Study Flow)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/plants/search?keyword=succulent",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "plants", "search"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "succulent"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Plant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Haworthia Zebra\",\n  \"species\": \"Haworthia attenuata (Succulent)\",\n  \"description\": \"Compact succulent with white pearly stripes on dark green leaves.\",\n  \"location\": \"Study Desk\",\n  \"wateringFrequency\": 14,\n  \"sunlightRequirement\": \"Bright Indirect\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=600&auto=format&fit=crop&q=80\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/plants",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "plants"]
+            }
+          }
+        },
+        {
+          "name": "Get Plant By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/plants/{{plantId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "plants", "{{plantId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Plant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"location\": \"Balcony Sunny Corner\",\n  \"wateringFrequency\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/plants/{{plantId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "plants", "{{plantId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Plant",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/plants/{{plantId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "plants", "{{plantId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reminders",
+      "item": [
+        {
+          "name": "Create Reminder (Case Study Flow)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plantId\": \"{{plantId}}\",\n  \"title\": \"Water succulent\",\n  \"reminderDate\": \"2026-10-10T09:00:00.000Z\",\n  \"reminderType\": \"Watering\",\n  \"notes\": \"Deep soak and drain thoroughly\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reminders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reminders"]
+            }
+          }
+        },
+        {
+          "name": "Get Reminders by User ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reminders/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reminders", "user", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Reminder Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"completed\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reminders/{{reminderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reminders", "{{reminderId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Community Posts",
+      "item": [
+        {
+          "name": "Get All Posts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "posts"]
+            }
+          }
+        },
+        {
+          "name": "Create Post (Case Study Flow)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Propagation tip: Perlite vs Water rooting\",\n  \"content\": \"I have found that root cuttings thrive much faster in damp perlite inside a closed humidity dome compared to plain tap water.\",\n  \"tags\": [\"propagation\", \"houseplants\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "posts"]
+            }
+          }
+        },
+        {
+          "name": "Comment on Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Fantastic tip! How often do you moisten the perlite?\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/posts/{{postId}}/comment",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "posts", "{{postId}}", "comment"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
